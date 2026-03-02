@@ -48,17 +48,21 @@ class _HomeState extends State<Home> {
       _complaints = data;
       isLoading = false;
     });
+    debugPrint('printing the complaints');
+    debugPrint(_complaints.toString());
   }
 
   void toComplaintDetails(
     BuildContext context,
     Map<String, dynamic> complaint,
-  ) {
-    Navigator.of(context).push(
+  ) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => ComplaintDetails(complaint: complaint),
       ),
     );
+
+    fetchComplaints();
   }
 
   // final List<Issues> _hostelComplaint = [

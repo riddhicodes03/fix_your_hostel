@@ -1,4 +1,7 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:client/screens/hosteller/widgets/progress_indicator.dart';
+import 'package:client/services/votes.dart';
 import 'package:client/theme/theme.dart';
 import 'package:client/util/user_storage.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +16,16 @@ class ComplaintDetails extends StatefulWidget {
 
 class _ComplaintDetailsState extends State<ComplaintDetails> {
   Map<String, dynamic>? user;
-
   bool isAdminLoading = true;
-  bool isVotesLoading = true;
+  bool isCheckVotesLoading = true;
+  bool isUpvoted = false;
+  bool isDownvoted = false;
+
+  Map<String, dynamic>? votes;
 
   @override
   void initState() {
     fetchUser();
-
     super.initState();
   }
 
@@ -30,23 +35,96 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       user = userData;
       isAdminLoading = false;
     });
+    checkVoteStatus();
   }
 
-  bool isUpvoted = false;
-  bool isDownvoted = false;
+  void checkVoteStatus() {
+    final List<dynamic> upVotes =
+        widget.complaint['upvotes'] as List<dynamic>? ?? [];
+    final List<dynamic> downVotes =
+        widget.complaint['downvotes'] as List<dynamic>? ?? [];
+    final userId = user?['id'];
+    setState(() {
+      isUpvoted = upVotes.contains(userId);
+      isDownvoted = downVotes.contains(userId);
+      isCheckVotesLoading = false;
+    });
+    debugPrint('Votes printed');
+    debugPrint(upVotes.toString());
+    debugPrint(downVotes.toString());
+  }
+
   int upvoteCount = 0;
   int downvoteCount = 0;
 
   Future<void> handleUpVote() async {
-    setState(() {
-      isUpvoted = true;
-    });
+    Votes vote = Votes(complaintId: widget.complaint['_id']);
+    final response = await vote.upVote();
+    if (!mounted) return;
+    if (response['message'] == "Vote updated") {
+      setState(() {
+        votes = response;
+        isUpvoted = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Up Vote Registered Successfully',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70),
+          ),
+          backgroundColor: AppColors.bgLight,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            textAlign: TextAlign.center,
+            'Error Occurred',
+            style: TextStyle(color: Colors.white70),
+          ),
+          backgroundColor: AppColors.bgLight,
+        ),
+      );
+    }
+    debugPrint(response.toString());
+    debugPrint('UpVoted Successfully');
   }
 
   Future<void> handleDownVote() async {
-    setState(() {
-      isDownvoted = true;
-    });
+    Votes vote = Votes(complaintId: widget.complaint['_id']);
+    final response = await vote.downVote();
+    if (!mounted) return;
+    if (response['message'] == "Vote updated") {
+      setState(() {
+        votes = response;
+        isDownvoted = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Down Vote Registered Successfully',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70),
+          ),
+          backgroundColor: AppColors.bgLight,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Error Occurred',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70),
+          ),
+          backgroundColor: AppColors.bgLight,
+        ),
+      );
+    }
+    debugPrint(response.toString());
+    debugPrint('Down Voted Successfully');
   }
 
   String toUpperCamelCase(String text) {
@@ -93,11 +171,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Reported Complaint',
+          widget.complaint['title'],
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
-      body: isAdminLoading
+      body: (isAdminLoading || isCheckVotesLoading)
           ? ProgressIndicatoring()
           : SafeArea(
               child: Container(
@@ -106,39 +184,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //title
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.complaint['title'],
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.9),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        //badges
-                        Row(
-                          children: [
-                            _statusBadge(
-                              toUpperCamelCase(widget.complaint['status']),
-                            ),
-                            SizedBox(width: 6),
-                            _priorityBadge(
-                              toUpperCamelCase(widget.complaint['priority']),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 10),
                     //descriptions
                     Container(
                       alignment: Alignment.topLeft,
@@ -150,6 +195,69 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       ),
                     ),
                     SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  _statusBadge(
+                                    toUpperCamelCase(
+                                      widget.complaint['status'],
+                                    ),
+                                  ),
+                                  SizedBox(width: 6),
+                                  _priorityBadge(
+                                    toUpperCamelCase(
+                                      widget.complaint['priority'],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (widget.complaint['type'] == "private") ...[
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 4,
+                                      ),
+                                      child: Icon(
+                                        Icons.lock_outline,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
+                                        size: 23,
+                                      ),
+                                    ),
+                                    SizedBox(width: 3),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 4,
+                                        right: 3,
+                                      ),
+                                      child: Text(
+                                        'Private',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+
+                        //badges
+                      ],
+                    ),
                     //Images
                     Container(
                       alignment: Alignment.center,
@@ -332,10 +440,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             'UpVote',
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface
-                                                  .withValues(alpha: 0.9),
+                                              color: isUpvoted || isDownvoted
+                                                  ? Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(alpha: 0.5)
+                                                  : Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(alpha: 0.9),
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -405,10 +518,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             'DownVote',
                                             style: TextStyle(
                                               fontSize: 18,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface
-                                                  .withValues(alpha: 0.9),
+                                              color: isUpvoted || isDownvoted
+                                                  ? Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(alpha: 0.5)
+                                                  : Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(alpha: 0.9),
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -430,26 +548,29 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 ),
               ),
             ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsetsGeometry.symmetric(vertical: 22, horizontal: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('Update'),
+
+      bottomNavigationBar: user?['role'] == "admin"
+          ? Padding(
+              padding: EdgeInsets.symmetric(vertical: 22, horizontal: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Update'),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text('Delete'),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('Delete'),
-              ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : SizedBox(),
     );
   }
 }

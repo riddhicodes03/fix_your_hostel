@@ -1,5 +1,5 @@
 import express from 'express'
-import { createIssue, deleteIssue, editIssueStatus, getIssues } from '../controllers/issue.controllers.js'
+import { createIssue, deleteIssue, editIssueStatus, editRemarks, getIssues } from '../controllers/issue.controllers.js'
 import authMiddleware from '../middleware/auth.middleware.js'
 import { downvotesIssue, upvotesIssue } from '../controllers/votes.controllers.js';
 import upload from '../middleware/upload.middleware.js';

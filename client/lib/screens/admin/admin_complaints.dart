@@ -1,4 +1,5 @@
 import 'package:client/screens/admin/widget/issue_card.dart';
+import 'package:client/screens/hosteller/complaint_details.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/api.dart';
 
@@ -25,6 +26,14 @@ class _AdminComplaintState extends State<AdminComplaint> {
       _complaints = data;
       isComplaintsLoading = false;
     });
+  }
+
+  void toComplaintDetails(Map<String, dynamic> complaint) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => ComplaintDetails(complaint: complaint),
+      ),
+    );
   }
 
   List<String> selectedBlocks = [];
@@ -240,7 +249,12 @@ class _AdminComplaintState extends State<AdminComplaint> {
                     : Column(
                         children: [
                           for (final complaint in _complaints)
-                            IssueCard(complaint: complaint, onTap: () {}),
+                            IssueCard(
+                              complaint: complaint,
+                              onTap: () {
+                                toComplaintDetails(complaint);
+                              },
+                            ),
                         ],
                       ),
               ),
