@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     default:true,
   },
   isApproved:{
-    type:String,
+    type:Boolean,
     default:false
   },
   createdAt:{
