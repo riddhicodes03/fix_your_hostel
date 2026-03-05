@@ -27,7 +27,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   bool isCheckVotesLoading = true;
   bool isUpvoted = false;
   bool isDownvoted = false;
-
+  int upvoteCount = 0;
+  int downvoteCount = 0;
   Map<String, dynamic>? votes;
   late TextEditingController _remarksController;
 
@@ -88,6 +89,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     Api api = Api();
     final response = await api.editRemarks(remarks, id);
     if (response['success'] == true || response['success'] == "true") {
+      setState(() {
+        widget.complaint['adminRemarks'] = remarks;
+      });
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -115,6 +119,40 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     }
   }
 
+  Future<void> _changeStatus(String status) async {
+    Api api = Api();
+    final response = await api.editStatus(status, widget.complaint['_id']);
+    if (!mounted) return;
+    if (response['success'] == "true" || response["success"] == true) {
+      setState(() {
+        widget.complaint['status'] = status;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Status updated Successfully',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70),
+          ),
+          backgroundColor: AppColors.bgLight,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Error Occurred',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70),
+          ),
+          backgroundColor: AppColors.bgLight,
+        ),
+      );
+    }
+    debugPrint(response.toString());
+    debugPrint('Down Voted Successfully');
+  }
+
   void checkVoteStatus() {
     final List<dynamic> upVotes =
         widget.complaint['upvotes'] as List<dynamic>? ?? [];
@@ -130,9 +168,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     debugPrint(upVotes.toString());
     debugPrint(downVotes.toString());
   }
-
-  int upvoteCount = 0;
-  int downvoteCount = 0;
 
   Future<void> handleUpVote() async {
     Votes vote = Votes(complaintId: widget.complaint['_id']);
@@ -288,7 +323,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                       status: toUpperCamelCase(
                                         widget.complaint['status'],
                                       ),
-                                      onStatusChanged: (value) {},
+                                      onStatusChanged: (value) {
+                                        _changeStatus(value);
+                                      },
                                     ),
                                     SizedBox(width: 6),
                                     _priorityBadge(
@@ -356,25 +393,53 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
 
                             style: TextStyle(
                               fontSize: 20,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 10),
                           Icon(
                             Icons.person,
-                            size: 28,
+                            size: 24,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                           SizedBox(width: 3),
                           Text(
                             widget.complaint['createdBy']['name'],
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
+
+                      widget.complaint['adminRemarks'].toString().isNotEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 20),
+                                Text(
+                                  'Admin Remarks :',
+
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    widget.complaint['adminRemarks'],
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(fontSize: 18),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : SizedBox(),
                       SizedBox(height: 20),
                       //admin side vote counts
                       user?['role'] == "admin" &&
@@ -427,16 +492,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 widget.complaint['adminRemarks']
                                         .toString()
                                         .isNotEmpty
-                                    ? Container(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          widget.complaint['description'],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(fontSize: 18),
-                                        ),
-                                      )
+                                    ? SizedBox()
                                     : Column(
                                         children: [
                                           TextField(

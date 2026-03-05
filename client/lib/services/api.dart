@@ -86,7 +86,10 @@ class Api {
     try {
       final response = await http.patch(
         url,
-        headers: {'Authorization': 'Bearer $token'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
         body: jsonEncode({"adminRemarks": remarks}),
       );
       debugPrint(
@@ -98,7 +101,36 @@ class Api {
         var data = jsonDecode(response.body);
         return data;
       } else {
-        throw Exception('Failed to delete complaints');
+        throw Exception('Failed to update remarks');
+      }
+    } catch (e) {
+      print(e);
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> editStatus(String status, String id) async {
+    final token = await TokenStorage.get();
+    var url = Uri.parse('$baseUrl/$id/status');
+    try {
+      final response = await http.patch(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({"status": status}),
+      );
+      debugPrint(
+        const JsonEncoder.withIndent('  ').convert(jsonDecode(response.body)),
+      );
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return data;
+      } else {
+        throw Exception('Failed to update status');
       }
     } catch (e) {
       print(e);

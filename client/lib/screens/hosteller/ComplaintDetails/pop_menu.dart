@@ -43,12 +43,21 @@ class _StatusBadgeMenuState extends State<StatusBadgeMenu> {
 
       // 👇 THIS IS THE CLICKABLE BADGE
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.only(top: 3, bottom: 3, right: 1, left: 6),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(currentStatus, style: const TextStyle(fontSize: 16)),
+        child: Row(
+          children: [
+            Text(currentStatus, style: const TextStyle(fontSize: 16)),
+            SizedBox(width: 3),
+            Icon(
+              Icons.arrow_drop_down_rounded,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ],
+        ),
       ),
     );
   }
