@@ -1,5 +1,6 @@
 import 'package:client/screens/admin/tabs.dart';
 import 'package:client/screens/hosteller/hosteller_tabs.dart';
+import 'package:client/screens/hosteller/wait.dart';
 import 'package:client/util/user_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/auth.dart';
@@ -43,23 +44,36 @@ class _Register extends State<Register> {
         'password': passController.text.trim(),
       };
       final response = await Auth.login(credentials);
-
+      //if got response
       if (response.isNotEmpty) {
-        await TokenStorage.save(response["token"]);
-        await UserStorage.saveUser(response["user"]);
-
-        if (!mounted) return;
-        if (response['user']['role'] == 'admin') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Tabs()),
-          );
+        //if isApproved and successful
+        if (response['statusCode'] == 200) {
+          await TokenStorage.save(response["token"]);
+          await UserStorage.saveUser(response["user"]);
+          //if admin
+          if (response["user"]["role"] == "admin") {
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (ctx) => Tabs()),
+            );
+            return;
+          }//if hosteller
+           else {
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (ctx) => HostellerTabs()),
+            );
+            return;
+          }
+        }
+        //if not approved then redirect to wait page
+        if (response['statusCode'] == 403) {
+          if (!mounted) return;
+          Navigator.push(context, MaterialPageRoute(builder: (ctx) => Wait()));
           return;
         }
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HostellerTabs()),
-        );
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -79,13 +93,12 @@ class _Register extends State<Register> {
       };
 
       final response = await Auth.register(userCredentials);
-      print(response);
+
       if (response.isNotEmpty) {
         await TokenStorage.save(response["token"]);
         await UserStorage.saveUser(response["user"]);
-        setState(() {
-          isLogin = true;
-        });
+        if (!mounted) return;
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => Wait()));
         return;
       } else {
         if (!mounted) return;
@@ -122,20 +135,20 @@ class _Register extends State<Register> {
                           //     },
                           //   ),
                           //name
-                          if(!isLogin)
-                          TextFormField(
-                            controller: nameController,
-                            decoration: InputDecoration(label: Text('Name')),
-                            enableSuggestions: false,
-                            validator: (value) {
-                              if (value == null ||
-                                  value.trim().isEmpty ||
-                                  value.length < 4) {
-                                return 'Username must contain atleast 4 characters';
-                              }
-                              return null;
-                            },
-                          ),
+                          if (!isLogin)
+                            TextFormField(
+                              controller: nameController,
+                              decoration: InputDecoration(label: Text('Name')),
+                              enableSuggestions: false,
+                              validator: (value) {
+                                if (value == null ||
+                                    value.trim().isEmpty ||
+                                    value.length < 4) {
+                                  return 'Username must contain atleast 4 characters';
+                                }
+                                return null;
+                              },
+                            ),
                           //email
                           TextFormField(
                             controller: emailController,

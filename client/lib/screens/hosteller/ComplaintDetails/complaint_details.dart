@@ -406,7 +406,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           Text(
                             widget.complaint['createdBy']['name'],
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18 ,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -420,7 +420,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 SizedBox(height: 20),
                                 Text(
                                   'Admin Remarks :',
-
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
