@@ -90,7 +90,7 @@ class _Register extends State<Register> {
         'password': passController.text.trim(),
         // 'rollNo': rollNoController.text.trim(),
         'hostelBlock': hostelBlockController.text.trim(),
-        'roomNo': roomNoController.text.trim(),
+        'roomNumber': roomNoController.text.trim(),
       };
 
       final response = await Auth.register(userCredentials);

@@ -50,34 +50,155 @@ class _ApprovalState extends State<Approval> {
               itemCount: users.length,
               itemBuilder: (context, index) {
                 final student = users[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
-                  child: ListTile(
-                    title: Text(
-                      student['name']!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text('Room: ${student['room']} '),
-                    isThreeLine: true,
-                    trailing: Row(
-                      mainAxisSize:
-                          MainAxisSize.min, // Essential for Row in trailing
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          ),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.cancel, color: Colors.red),
-                          onPressed: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
                         ),
                       ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// TOP ROW
+                          Row(
+                            children: [
+                              /// Avatar
+                              CircleAvatar(
+                                radius: 24,
+                                backgroundColor: Colors.blue.shade100,
+                                child: Text(
+                                  student['name'][0],
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(width: 12),
+
+                              /// Name + email
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      student['name'],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      student['email'],
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          /// DETAILS
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.badge,
+                                size: 18,
+                                color: Colors.white70,
+                              ),
+                              const SizedBox(width: 6),
+                              Text("Roll No: ${student['rollNo'] ?? "N/A"}"),
+                            ],
+                          ),
+
+                          const SizedBox(height: 6),
+
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.apartment,
+                                size: 18,
+                                color: Colors.white70,
+                              ),
+                              const SizedBox(width: 6),
+                              Text("Block: ${student['hostelBlock']}"),
+                            ],
+                          ),
+
+                          const SizedBox(height: 6),
+
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.meeting_room,
+                                size: 18,
+                                color: Colors.white70,
+                              ),
+                              const SizedBox(width: 6),
+                              Text("Room: ${student['roomNumber']}"),
+                            ],
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          /// ACTION BUTTONS
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              /// Reject
+                              OutlinedButton.icon(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                ),
+                                label: const Text(
+                                  "Reject",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+
+                              const SizedBox(width: 10),
+
+                              /// Approve
+                              ElevatedButton.icon(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                ),
+                                label: const Text(
+                                  "Approve",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
