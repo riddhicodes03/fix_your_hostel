@@ -1,3 +1,4 @@
+import 'package:client/screens/dialog_box.dart';
 import 'package:client/screens/hosteller/widgets/progress_indicator.dart';
 import 'package:client/services/user.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,9 @@ class _ApprovalState extends State<Approval> {
     if (response.isNotEmpty &&
         (response['success'] == true || response['success'] == "true")) {
       setState(() {
-        users = List<Map<String, dynamic>>.from(response['data']);
+        users = List<Map<String, dynamic>>.from(
+          response['data'],
+        ).where((user) => user['isApproved'] == false).toList();
         isUserLoading = false;
       });
     } else {
@@ -37,6 +40,35 @@ class _ApprovalState extends State<Approval> {
       });
     }
   }
+
+  void approveUser(String id) async {
+    UserApi api = UserApi();
+    final response = await api.approveUser(id);
+
+    if (!mounted) return;
+
+    if (response.isNotEmpty &&
+        (response['success'] == true || response['success'] == "true")) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return DialogBox(
+            message: "User has been approved successfully!!",
+            onTap: () {
+              Navigator.pop(context);
+              isUserLoading = true;
+              fetchUsers();
+            },
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error occurred: ${response['message']}')),
+      );
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +108,6 @@ class _ApprovalState extends State<Approval> {
                           /// TOP ROW
                           Row(
                             children: [
-                              /// Avatar
-                              CircleAvatar(
-                                radius: 24,
-                                backgroundColor: Colors.blue.shade100,
-                                child: Text(
-                                  student['name'][0],
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(width: 12),
-
                               /// Name + email
                               Expanded(
                                 child: Column(
@@ -182,7 +199,9 @@ class _ApprovalState extends State<Approval> {
 
                               /// Approve
                               ElevatedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  approveUser(student['_id']);
+                                },
                                 icon: const Icon(
                                   Icons.check,
                                   color: Colors.white,
