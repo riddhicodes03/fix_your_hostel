@@ -24,7 +24,7 @@ export function useCreateIssue(){
             if(!res.ok){
                 throw new Error("Failed to create issue")
             }
-            console.log(res.json())
+            // console.log(res.json())
             return res.json();
         },
         onSuccess:()=>{
@@ -105,44 +105,54 @@ export function useDeleteIssue(){
 }
 
 export function useUpvotes(){
+  const queryClient = useQueryClient();
   return useMutation({
-      mutationFn: async (id) => {
-          const res = await fetch(
-            `http://localhost:5000/api/issue/${id}/upvotes`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            },
-          );
-          if(!res.ok){
-              throw new Error("Failed to upvote issue")
-          }
-          return res.json();
-      },
-  })
+    mutationFn: async (id) => {
+      const res = await fetch(`http://localhost:5000/api/issue/${id}/upvotes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      if (!res.ok) {
+        throw new Error("Failed to upvote issue");
+      }
+      return res.json();
+    },
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Invalidate the query with the key "issue" after a successful upvote operation.
+ */
+/*******  ef1326e3-3fd8-4402-8a45-2b9475301b1d  *******/
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["issue"] });
+    },
+  });
 }
 
 export function useDownvotes(){
+   const queryClient = useQueryClient();
   return useMutation({
-      mutationFn: async (id) => {
-          const res = await fetch(
-            `http://localhost:5000/api/issue/${id}/downvotes`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            },
-          );
-          if(!res.ok){
-              throw new Error("Failed to downvote issue")
-          }
-          return res.json();
-      },
-  })
+    mutationFn: async (id) => {
+      const res = await fetch(
+        `http://localhost:5000/api/issue/${id}/downvotes`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        },
+      );
+      if (!res.ok) {
+        throw new Error("Failed to downvote issue");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["issue"] });
+    },
+  });
 }
 
