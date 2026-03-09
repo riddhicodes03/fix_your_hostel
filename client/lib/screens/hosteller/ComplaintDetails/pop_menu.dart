@@ -33,6 +33,7 @@ class _StatusBadgeMenuState extends State<StatusBadgeMenu> {
 
   @override
   Widget build(BuildContext context) {
+    String status = currentStatus.toLowerCase().trim();
     return PopupMenuButton<String>(
       onSelected: updateStatus,
       itemBuilder: (context) => const [
@@ -50,7 +51,17 @@ class _StatusBadgeMenuState extends State<StatusBadgeMenu> {
         ),
         child: Row(
           children: [
-            Text(currentStatus, style: const TextStyle(fontSize: 16)),
+            Text(
+              currentStatus,
+              style: TextStyle(
+                fontSize: 16,
+                color: status == "in progress" || status == "in Progress"
+                    ? Colors.blue[300]
+                    : status == "pending"
+                    ? Colors.red
+                    : Colors.green,
+              ),
+            ),
             SizedBox(width: 3),
             Icon(
               Icons.arrow_drop_down_rounded,

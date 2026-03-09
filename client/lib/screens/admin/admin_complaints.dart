@@ -29,12 +29,17 @@ class _AdminComplaintState extends State<AdminComplaint> {
     });
   }
 
-  void toComplaintDetails(Map<String, dynamic> complaint) {
-    Navigator.of(context).push(
+  void toComplaintDetails(Map<String, dynamic> complaint) async {
+    final response = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => ComplaintDetails(complaint: complaint),
       ),
     );
+    if (response == true) {
+      setState(() {
+        fetchComplaints();
+      });
+    }
   }
 
   List<String> selectedBlocks = [];
