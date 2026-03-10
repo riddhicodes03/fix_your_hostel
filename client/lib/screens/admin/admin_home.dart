@@ -35,12 +35,16 @@ class _AdminHomeState extends State<AdminHome> {
     return count;
   }
 
-  void toComplaintDetails(Map<String, dynamic> complaint) {
-    Navigator.of(context).push(
+  void toComplaintDetails(Map<String, dynamic> complaint) async {
+    final response = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => ComplaintDetails(complaint: complaint),
       ),
     );
+    print(response);
+    if (response == true) {
+      fetchComplaints();
+    }
   }
 
   @override
@@ -73,130 +77,138 @@ class _AdminHomeState extends State<AdminHome> {
     const spacing = 12.0; // SizedBox width between cards
 
     return Scaffold(
-      body: (isAdminLoading || isComplaintsLoading)
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome ${admin?['name']}',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: (isAdminLoading || isComplaintsLoading)
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: SafeArea(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Welcome ${admin?['name']}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      // Cards Section
-                      Row(
-                        children: [
-                          CardBox(
-                            title: 'Total Issues',
-                            count: _complaints.length,
-                          ),
-                          SizedBox(width: spacing),
-                          CardBox(
-                            title: 'In progress',
-                            count: getCount('in progress'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: [
-                          CardBox(
-                            title: 'Resolved',
-                            count: getCount('resolved'),
-                          ),
-                          SizedBox(width: 10),
-                          CardBox(title: 'Pending', count: getCount('pending')),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Highest Priority Complaints',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(height: 20),
+                        // Cards Section
+                        Row(
+                          children: [
+                            CardBox(
+                              title: 'Total Issues',
+                              count: _complaints.length,
+                            ),
+                            SizedBox(width: spacing),
+                            CardBox(
+                              title: 'In progress',
+                              count: getCount('in progress'),
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.left,
-                      ),
-
-                      //Urgent Issues List
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          var complaint = _complaints[index];
-
-                          return complaint?['type'] == "public" &&
-                                  complaint?['status'] == "pending"
-                              ? IssueCard(
-                                  complaint: complaint,
-                                  onTap: () {
-                                    toComplaintDetails(complaint);
-                                  },
-                                )
-                              : Container();
-                        },
-                        itemCount: isComplaintsLoading
-                            ? 0
-                            : (_complaints.length >= 3
-                                  ? 3
-                                  : _complaints.length),
-                        shrinkWrap: true,
-
-                        physics: NeverScrollableScrollPhysics(),
-                      ),
-                      SizedBox(height: 10),
-                      const Divider(thickness: 1, color: Colors.grey),
-                      QuickButton(
-                        title: 'View All Complaints',
-                        icon: Icons.list_sharp,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => AdminComplaint(),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            CardBox(
+                              title: 'Resolved',
+                              count: getCount('resolved'),
                             ),
-                          );
-                        },
-                      ),
-                      QuickButton(
-                        title: 'Approve Request',
-                        icon: Icons.person_add_alt,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (ctx) => Approval()),
-                          );
-                        },
-                      ),
-                      QuickButton(
-                        title: 'Send Announcement',
-                        icon: Icons.send_outlined,
-                        onTap: () {},
-                      ),
-                      QuickButton(
-                        title: 'Insights',
-                        icon: Icons.insights_outlined,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => AdminInsights(),
+                            SizedBox(width: 10),
+                            CardBox(
+                              title: 'Pending',
+                              count: getCount('pending'),
                             ),
-                          );
-                        },
-                      ),
-                      const Divider(thickness: 1, color: Colors.grey),
-                    ],
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Highest Priority Complaints',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+
+                        //Urgent Issues List
+                        ListView.builder(
+                          itemBuilder: (context, index) {
+                            var complaint = _complaints[index];
+
+                            return complaint?['type'] == "public" &&
+                                    complaint?['status'] == "pending"
+                                ? IssueCard(
+                                    complaint: complaint,
+                                    onTap: () {
+                                      toComplaintDetails(complaint);
+                                    },
+                                  )
+                                : Container();
+                          },
+                          itemCount: isComplaintsLoading
+                              ? 0
+                              : (_complaints.length >= 3
+                                    ? 3
+                                    : _complaints.length),
+                          shrinkWrap: true,
+
+                          physics: NeverScrollableScrollPhysics(),
+                        ),
+                        SizedBox(height: 10),
+                        const Divider(thickness: 1, color: Colors.grey), 
+                        QuickButton(
+                          title: 'View All Complaints',
+                          icon: Icons.list_sharp,
+                          onTap: () async {
+                            final response = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => AdminComplaint(),
+                              ),
+                            );
+                            if (response == true) {
+                              fetchComplaints();
+                            }
+                          },
+                        ),
+                        QuickButton(
+                          title: 'Approve Request',
+                          icon: Icons.person_add_alt,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (ctx) => Approval()),
+                            );
+                          },
+                        ),
+                        QuickButton(
+                          title: 'Send Announcement',
+                          icon: Icons.send_outlined,
+                          onTap: () {},
+                        ),
+                        QuickButton(
+                          title: 'Insights',
+                          icon: Icons.insights_outlined,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => AdminInsights(),
+                              ),
+                            );
+                          },
+                        ),
+                        const Divider(thickness: 1, color: Colors.grey),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }
