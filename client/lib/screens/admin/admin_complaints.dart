@@ -13,6 +13,7 @@ class AdminComplaint extends StatefulWidget {
 
 class _AdminComplaintState extends State<AdminComplaint> {
   bool isComplaintsLoading = true;
+  bool hasUpdated = false;
   List<dynamic> _complaints = [];
   @override
   void initState() {
@@ -40,6 +41,9 @@ class _AdminComplaintState extends State<AdminComplaint> {
     );
     print(response);
     if (response == true) {
+      setState(() {
+        hasUpdated = true;
+      });
       fetchComplaints();
     }
   }
@@ -284,59 +288,67 @@ class _AdminComplaintState extends State<AdminComplaint> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Column(
-          children: [
-            /// HEADER ROW
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Complaints",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.filter_list),
-                  color: Theme.of(context).colorScheme.onSurface,
-                  onPressed: _openFilterSheet,
-                ),
-              ],
-            ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.pop(context, hasUpdated);
+        }
+      },
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Column(
+            children: [
+              /// HEADER ROW
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Complaints",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.filter_list),
+                    color: Theme.of(context).colorScheme.onSurface,
+                    onPressed: _openFilterSheet,
+                  ),
+                ],
+              ),
 
-            /// LIST SECTION
-            Expanded(
-              child: isComplaintsLoading
-                  ? ProgressIndicatoring()
-                  : _complaints.isEmpty
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'No Complaints Found',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
+              /// LIST SECTION
+              Expanded(
+                child: isComplaintsLoading
+                    ? ProgressIndicatoring()
+                    : _complaints.isEmpty
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'No Complaints Found',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            for (final complaint in _complaints)
+                              IssueCard(
+                                complaint: complaint,
+                                onTap: () {
+                                  toComplaintDetails(complaint);
+                                },
+                              ),
+                          ],
                         ),
                       ),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          for (final complaint in _complaints)
-                            IssueCard(
-                              complaint: complaint,
-                              onTap: () {
-                                toComplaintDetails(complaint);
-                              },
-                            ),
-                        ],
-                      ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
