@@ -45,6 +45,7 @@ class _AddIssue extends State<AddIssue> {
       "title": titleController.text.trim(),
       "description": descriptionController.text.trim(),
       "type": "private",
+      "category": selectedCategory.toString(),
     });
     if (response != null) {
       if (!mounted) return;

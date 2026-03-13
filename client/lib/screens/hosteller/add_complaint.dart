@@ -1,3 +1,4 @@
+import 'package:client/screens/dialog_box.dart';
 import 'package:client/services/api.dart';
 import 'package:flutter/material.dart';
 import 'package:client/util/user_storage.dart';
@@ -47,11 +48,13 @@ class _AddComplaintState extends State<AddComplaint> {
     });
     if (response != null) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Complaint submitted successfully!')),
+      DialogBox(
+        message: "Complaint Submitted Successfully",
+        onTap: () {
+          Navigator.pop(context);
+        },
       );
-      Navigator.pop(context);
+      
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();

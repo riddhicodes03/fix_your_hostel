@@ -1,3 +1,35 @@
 {
-  "cmake.sourceDirectory": "D:/Fixed_Your_Hostel/client/linux"
+  "cmake.sourceDirectory": "D:/Fixed_Your_Hostel/client/linux",
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "password": "root",
+      "database": "mysql",
+      "username": "riddi",
+      "name": "hello"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "ssh": "Disabled",
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "Local Mysql",
+      "database": "mysql",
+      "username": "root",
+      "password": "root"
+    }
+  ]
 }

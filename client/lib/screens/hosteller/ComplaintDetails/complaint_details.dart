@@ -61,6 +61,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     if (!mounted) return;
     debugPrint(response.toString());
     if (response['success'] == "true" || response['success'] == true) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -73,6 +74,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       );
       Navigator.pop(context, true);
     } else {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -94,6 +96,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         widget.complaint['adminRemarks'] = remarks;
       });
       if (!mounted) return;
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -109,6 +112,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       });
     } else {
       if (!mounted) return;
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
