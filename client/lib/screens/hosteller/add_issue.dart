@@ -1,4 +1,5 @@
 import 'package:client/class/issues.dart';
+import 'package:client/screens/dialog_box.dart';
 import 'package:client/screens/hosteller/widgets/image_input.dart';
 import 'package:client/services/api.dart';
 import 'package:client/util/user_storage.dart';
@@ -61,13 +62,19 @@ class _AddIssue extends State<AddIssue> {
       isLoading = false;
     });
     if (response != null) {
-      print(response);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Complaint submitted successfully!')),
+      showDialog(
+        context: context,
+        builder: (context) {
+          return DialogBox(
+            message: "Complaint Submitted Successfully",
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          );
+        },
       );
-      Navigator.pop(context);
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -79,7 +86,7 @@ class _AddIssue extends State<AddIssue> {
     }
   }
 
-  void showLoadingDialog(BuildContext context) {  
+  void showLoadingDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,

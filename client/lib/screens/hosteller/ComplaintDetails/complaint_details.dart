@@ -408,14 +408,28 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           ],
                         ),
                         //Images
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(15),
-                          child: Text(
-                            'Images section',
-                            style: TextStyle(fontSize: 20),
+                        if (widget.complaint['images'].length != 0)
+                          Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(15),
+                            child: Image.network(
+                              widget.complaint['images'][0],
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress != null) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                        ),
+                                      );
+                                    }
+                                    return child;
+                                  },
+                            ),
                           ),
-                        ),
+                        SizedBox(height: 20), 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -569,7 +583,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 ),
               ),
 
-        bottomNavigationBar: user?['role'] == "admin"
+        bottomNavigationBar:
+            isAdminLoading && user?['role'] == "admin" ||
+                widget.complaint['createdBy']['email'] == user?['email']
             ? Padding(
                 padding: EdgeInsets.symmetric(vertical: 22, horizontal: 10),
                 child: Row(

@@ -54,7 +54,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Hostel Address -${user?['hostelBlock']},${user?['roomNumber']}',
+                  'Hostel Address - ${user?['hostelBlock']}, ${user?['roomNumber']}',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey.withValues(alpha: 0.9),
