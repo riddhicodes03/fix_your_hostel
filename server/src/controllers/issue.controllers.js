@@ -16,13 +16,14 @@ export const createIssue = async (req, res) => {
     }
 
     let result
+    console.log(req.file)
     if(req.file){
       console.log(req.file);
-      result = await uploadToCloudinary(req.file.buffer);
+      result = await uploadToCloudinary(req.file.buffer,"issues");
       console.log(result);
     }
     
-   
+
     const uploadedImage = result.secure_url;
 
     const issue = await Issue.create({

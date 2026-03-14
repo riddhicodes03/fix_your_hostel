@@ -79,7 +79,7 @@ class _AddIssue extends State<AddIssue> {
     }
   }
 
-  void showLoadingDialog(BuildContext context) {
+  void showLoadingDialog(BuildContext context) {  
     showDialog(
       context: context,
       barrierDismissible: false,

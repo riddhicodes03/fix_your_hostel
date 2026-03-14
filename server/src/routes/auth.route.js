@@ -114,6 +114,8 @@ router.post("/login", async (req, res)=>{
           id: user._id,
           name: user.name,
           email: user.email,
+          hostelBlock:user.hostelBlock,
+          roomNumber:user.roomNumber,
           role: user.role,
         },
       });

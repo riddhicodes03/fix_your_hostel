@@ -6,14 +6,14 @@ const uploadToCloudinary =  (buffer, folder='uploads') => {
     // console.log(cloudinary.config());
 
     return new Promise((resolve, reject) => {
-        const strem = cloudinary.uploader.upload_stream(
+        const stream = cloudinary.uploader.upload_stream(
             {folder},
             (error, result) => {
                 if(error) reject(error);
                 else resolve(result);
             }
         );
-        strem.end(buffer);
+        stream.end(buffer);
     })
 };
 
