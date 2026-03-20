@@ -34,5 +34,11 @@ Open Server folder in integrated terminal
 cd ./src/
 npm start
 ```
-
-
+create .env folder inside /server
+```
+PORT=5000
+MONGODB_URL=YOUR_MONGODB_URL
+JWT_SECRET=YOUR_JWT_SECRET
+```
+### Step 4 : Cloudinary Setup (For images)
+ 
