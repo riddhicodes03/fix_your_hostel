@@ -3,6 +3,22 @@ An app for hostellers to list their issues and complains related to hostel facil
 ## How It Works
 Here Hostellers registers in the app and waits for admin approval, once its approved he can submit his Personal Room Complaint and Hostel Complaints publically or privately with Image.<br><br>Hosteller can upvote or downvote in the existing public hostel complaints of his own hostel regarding the issue to increase its priority  
 Admins can track the hostel complaints resolutions in his home page and can see the high priority complaints, Approve hostellers, Filter complaints with Hostel Block, priority, visiblity. After checking the hostel complaint details he can send admin remarks and update progress.<br><br>It simplifies the commmunication between hostellers and authorities with real time updates, voting system, complaint tracking.
+## Features - 
+#### Hosteller -
+- Raise complaints (room / public)
+- Upvote / downvote complaints
+- Track complaint status
+- View updates & remarks
+#### Admin -
+- View all complaints
+- Filter by block / status / visibility
+- Update progress (Pending / In Progress / Resolved)
+- Add remarks
+## Tech Stack 
+- Frontend : Flutter
+- Backend : Node.js, express.js
+- Database : MongoDB
+- Other tools : Cloudinary
 ## Installation
 Follow these steps to run the project locally
 ### Prerequisites 
@@ -12,9 +28,9 @@ Follow these steps to run the project locally
 - ADB (Android Debug Bridge)
 - VS Code / Android Studio
 ### Step 1 : Enable USB Debugging
-Enable USB Debugging from Developer options
-Connect your device with your laptop (using USB or type C)
-Allow USB Debugging Pop up
+- Enable USB Debugging from Developer options
+- Connect your device with your laptop (using USB or type C)
+- Allow USB Debugging Pop up
 ### Step 2 : ADB setup
 check for adb devices in command prompt
 ```
@@ -58,13 +74,17 @@ isActive : true
 isApproved : "true"
 ```
 ### Step 4 : Cloudinary Setup (For images)
- - Create Cloudinary Account
- - Copy your Cloud name, API Key, API secret
+ - Create **Cloudinary** Account
+ - Copy your **Cloud name, API Key, API secret**
 Update **.env** inside **/server**
 ```
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
-
-
+### Step 5 : Flutter App Setup 
+```
+cd client
+flutter pub get
+```
+- Click on **Run without Debugging** from the top menu bar
