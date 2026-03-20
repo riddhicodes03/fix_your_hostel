@@ -11,7 +11,7 @@ Follow these steps to run the project locally
 - MongoDB 
 - ADB (Android Debug Bridge)
 - VS Code / Android Studio
-### Step 1 : Enable USB Debugginh
+### Step 1 : Enable USB Debugging
 Enable USB Debugging from Developer options
 Connect your device with your laptop (using USB or type C)
 Allow USB Debugging Pop up
@@ -29,16 +29,42 @@ check for connection
 adb reverse --list
 ```
 ### Step 3 : Backend Setup
-Open Server folder in integrated terminal
+- Open Server folder in integrated terminal
 ```
 cd ./src/
 npm start
 ```
-create .env folder inside /server
+- create .env folder inside /server
 ```
 PORT=5000
 MONGODB_URL=YOUR_MONGODB_URL
 JWT_SECRET=YOUR_JWT_SECRET
 ```
+- Install **POSTMAN**
+- create a new post request
+- Use endpoint
+```
+http://localhost:5000/api/auth/register
+```
+- Send Request with Request Body to add Admin manually
+```
+name : "Admin"
+email : "admin@hostel.com"
+password : "admin123"
+role : "admin"
+hostelBlock : null
+roomNumber : null
+isActive : true
+isApproved : "true"
+```
 ### Step 4 : Cloudinary Setup (For images)
- 
+ - Create Cloudinary Account
+ - Copy your Cloud name, API Key, API secret
+Update **.env** inside **/server**
+```
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+
