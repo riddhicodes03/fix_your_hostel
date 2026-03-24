@@ -7,7 +7,7 @@ import 'package:client/screens/hosteller/widgets/empty_list.dart';
 import 'package:client/screens/hosteller/widgets/progress_indicator.dart';
 import 'package:client/theme/theme.dart';
 import 'package:client/screens/hosteller/widgets/issue_button.dart';
-
+import 'package:client/util/user_storage.dart';
 import 'package:client/screens/hosteller/widgets/raise_card.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/api.dart';
@@ -25,18 +25,35 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     fetchComplaints();
+    loadUser();
   }
 
-  void toAddIssuePage(BuildContext context) {
-    Navigator.of(
+  Map<String, dynamic>? user;
+  Future<void> loadUser() async {
+    final userData = await UserStorage.getUser();
+    print(userData);
+    setState(() {
+      user = userData;
+    });
+    debugPrint(userData.toString());
+  }
+
+  void toAddIssuePage(BuildContext context) async {
+    final response = await Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (ctx) => const AddIssue()));
+    if (response == true) {
+      fetchComplaints();
+    }
   }
 
-  void toAddComplaintPage(BuildContext context) {
-    Navigator.of(
+  void toAddComplaintPage(BuildContext context) async {
+    final response = await Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (ctx) => AddComplaint()));
+    if (response == true) {
+      fetchComplaints();
+    }
   }
 
   List<dynamic> _complaints = [];
@@ -48,8 +65,6 @@ class _HomeState extends State<Home> {
       _complaints = data;
       isLoading = false;
     });
-    debugPrint('printing the complaints');
-    debugPrint(_complaints.toString());
   }
 
   void toComplaintDetails(
@@ -65,32 +80,6 @@ class _HomeState extends State<Home> {
     fetchComplaints();
   }
 
-  // final List<Issues> _hostelComplaint = [
-  //   Issues(
-  //     title: 'Uneccessary High fees',
-  //     description:
-  //         'Hostel facilities are not improved but they are still increasing the amount',
-  //     raisedBy: 'Nayan Jyoti Borah',
-  //   ),
-  //   Issues(
-  //     title: 'Food issue',
-  //     description: 'Bad food quality',
-  //     raisedBy: 'Afruz alam Barbhuyan',
-  //   ),
-  //   Issues(
-  //     title: 'Dirty washrooms',
-  //     description:
-  //         'All the washrooms are dirty, there no mugs, taps are broker, hooks are broken',
-  //     raisedBy: 'Riddhi sundar sahu',
-  //   ),
-  //   Issues(
-  //     title: 'Water leakage',
-  //     description:
-  //         'During rain seasons water leaks from the gaps of stairs and it could make someone fall in stairs and cost him a severe injury, you wont be at the dawn this is calling out for you, this calling out for you ',
-  //     raisedBy: 'Rahat Islam',
-  //   ),
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +92,8 @@ class _HomeState extends State<Home> {
         title: const Text(''),
       ),
       body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -194,7 +185,10 @@ class _HomeState extends State<Home> {
                   )
                 else
                   for (final complaints in _complaints)
-                    if (complaints['type'] == 'public')
+                    if (complaints['type'] == 'public' &&
+                        complaints['createdBy']['hostelBlock'] ==
+                            user?['hostelBlock'] &&
+                        complaints['status'] != 'resolved')
                       RaisedCard(
                         complaint: complaints,
                         onTap: () {

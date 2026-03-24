@@ -24,6 +24,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Map<String, dynamic>? user;
   Future<void> loadUser() async {
     final userData = await UserStorage.getUser();
+    print(userData);
     setState(() {
       user = userData;
     });
@@ -53,7 +54,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Hostel Address - Hostel B, NB-80',
+                  'Hostel Address - ${user?['hostelBlock']}, ${user?['roomNumber']}',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey.withValues(alpha: 0.9),

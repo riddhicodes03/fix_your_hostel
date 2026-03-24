@@ -42,7 +42,6 @@ class IssueCard extends StatelessWidget {
         child: Text(text, style: const TextStyle(fontSize: 12)),
       );
     }
-    
 
     final cardWidth = screenWidth - (margin * 2);
     return GestureDetector(
@@ -99,16 +98,20 @@ class IssueCard extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(width: 4),
-                              Text(
-                                complaint?['title'] ?? 'No Title',
-                                style: Theme.of(context).textTheme.titleLarge!
-                                    .copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text(
+                                  complaint?['title'] ?? 'No Title',
+                                  style: Theme.of(context).textTheme.titleLarge!
+                                      .copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurface,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
                               ),
                             ],
                           ),
@@ -122,9 +125,7 @@ class IssueCard extends StatelessWidget {
                               ),
                               SizedBox(width: 6),
                               _priorityBadge(
-                                toUpperCamelCase(
-                                  complaint?['priority'] ?? 'Unknown',
-                                ),
+                                "Block : ${toUpperCamelCase(complaint?['createdBy']['hostelBlock'] ?? "Undefined")}",
                               ),
                             ],
                           ),

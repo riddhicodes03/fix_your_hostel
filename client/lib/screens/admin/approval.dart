@@ -169,7 +169,7 @@ class _ApprovalState extends State<Approval> {
                                 color: Colors.white70,
                               ),
                               const SizedBox(width: 6),
-                              Text("Roll No: ${student['rollNo'] ?? "N/A"}"),
+                              Text("Roll No: ${student['rollno'] ?? "N/A"}"),
                             ],
                           ),
 
