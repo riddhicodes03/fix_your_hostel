@@ -15,6 +15,10 @@ class MyIssues extends StatefulWidget {
 }
 
 class _MyIssuesState extends State<MyIssues> {
+  List<String> selectedBlocks = [];
+  String selectedVisibility = "all";
+  String selectedStatus = "all";
+
   bool isUserLoading = true;
   bool isComplaintLoading = true;
   List<dynamic> _complaints = [];
@@ -39,7 +43,10 @@ class _MyIssuesState extends State<MyIssues> {
   void fetchComplaints() async {
     print('Fetching complaints from API...');
     Api api = Api();
-    var data = await api.getComplaints();
+    var data = await api.getComplaints(
+      type: selectedVisibility == "all" ? null : selectedVisibility,
+      status: selectedStatus == "all" ? null : selectedStatus,
+    );
 
     setState(() {
       _complaints = data;
@@ -47,12 +54,63 @@ class _MyIssuesState extends State<MyIssues> {
     });
   }
 
+  DropdownMenuItem<String> _buildItem(
+    String value,
+    String text,
+    IconData icon,
+  ) {
+    return DropdownMenuItem(
+      value: value,
+      child: Row(
+        children: [Icon(icon, size: 18), const SizedBox(width: 10), Text(text)],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Show a centered boxed loader while user or complaints are loading
 
     return Scaffold(
-      appBar: AppBar(title: Text('My Issues')),
+      appBar: AppBar(
+        title: Text('My Issues'),
+        actions: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: selectedStatus,
+                icon: const Icon(Icons.expand_more, size: 20),
+                borderRadius: BorderRadius.circular(12),
+                dropdownColor: Theme.of(context).colorScheme.surface,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500),
+
+                items: [
+                  _buildItem("all", "All", Icons.list),
+                  _buildItem("pending", "Pending", Icons.hourglass_bottom),
+                  _buildItem("in progress", "In Progress", Icons.sync),
+                  _buildItem("resolved", "Resolved", Icons.check_circle),
+                ],
+
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
+                  });
+                  fetchComplaints();
+                },
+              ),
+            ),
+          ),
+          SizedBox(width: 20),
+        ],
+      ),
       body: (isComplaintLoading || isUserLoading)
           ? ProgressIndicatoring()
           : _complaints.isEmpty
