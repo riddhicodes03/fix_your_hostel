@@ -113,22 +113,44 @@ class _Register extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+
             children: [
               Card(
-                margin: EdgeInsets.all(16),
+                margin: EdgeInsets.all(15),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: EdgeInsetsGeometry.all(8),
+                    padding: EdgeInsetsGeometry.symmetric(
+                      horizontal: 15,
+                      vertical: 8,
+                    ),
                     child: Form(
                       key: _form,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          SizedBox(height: 8),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/hotel.png', width: 70),
+                              SizedBox(height: 15),
+                              Text(
+                                "Fix Your Hostel",
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25,
+                                ),
+                              ),
+                            ],
+                          ),
                           // if (!isLogin)
                           //   ImageInput(
                           //     onSelectImage: (pickedImage) {
@@ -136,6 +158,7 @@ class _Register extends State<Register> {
                           //     },
                           //   ),
                           //name
+                          SizedBox(height: 7),
                           if (!isLogin)
                             TextFormField(
                               controller: nameController,
@@ -257,37 +280,78 @@ class _Register extends State<Register> {
                                 return null;
                               },
                             ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 25),
 
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.primary,
-                            ),
-                            onPressed: _submit,
-                            child: Text(
-                              isLogin ? 'Login' : 'Sign Up',
-                              style: Theme.of(context).textTheme.bodyMedium!
-                                  .copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSecondary,
-                                  ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                isLogin = !isLogin;
-                              });
-                            },
-                            child: Text(
-                              isLogin
-                                  ? 'Create an account'
-                                  : 'Already have an account',
+                          SizedBox(
+                            height: 50,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.primary,
+                                fixedSize: Size(120, 50),
+                              ),
+                              onPressed: _submit,
+                              child: Text(
+                                isLogin ? 'Login' : 'Sign Up',
+                                style: Theme.of(context).textTheme.bodyMedium!
+                                    .copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSecondary,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
                             ),
                           ),
+                          SizedBox(height: 10),
+                          isLogin
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Don't have an account?"),
+                                    SizedBox(width: 3),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size(0, 0),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isLogin = !isLogin;
+                                        });
+                                      },
+                                      child: Text("SIGN UP"),
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+
+                                  children: [
+                                    Text("Already have an account?"),
+                                    SizedBox(width: 3),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLogin = !isLogin;
+                                        });
+                                      },
+                                      style: TextButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size(0, 0),
+                                      ),
+                                      child: Text("LOG IN"),
+                                    ),
+                                  ],
+                                ),
                         ],
                       ),
                     ),
