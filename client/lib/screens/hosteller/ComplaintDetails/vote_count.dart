@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:client/theme/theme.dart';
+
 
 class VoteCount extends StatelessWidget {
   const VoteCount({super.key, required this.title, required this.votes});
@@ -11,7 +11,7 @@ class VoteCount extends StatelessWidget {
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        border: BoxBorder.all(color: AppColors.border),
+        border: BoxBorder.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

@@ -40,12 +40,11 @@ class _AccountScreenState extends State<AccountScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 30),
             Container(
               padding: EdgeInsets.all(18),
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.surfaceContainer,
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: [
                   BoxShadow(
@@ -97,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          "${user?['hostelBlock'] ?? '-'}, Room ${user?['roomNumber'] ?? '-'}",
+                          "${user?['hostelBlock'] ?? '-'}, Room - ${user?['roomNumber'] ?? 'Not mentioned'}",
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.grey.shade600,
@@ -109,7 +108,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+
             const Divider(),
             ListTile(
               leading: Icon(Icons.person_2_outlined),

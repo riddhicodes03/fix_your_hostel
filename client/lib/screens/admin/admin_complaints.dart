@@ -296,6 +296,7 @@ class _AdminComplaintState extends State<AdminComplaint> {
         }
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
         body: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: Column(
@@ -334,16 +335,23 @@ class _AdminComplaintState extends State<AdminComplaint> {
                         ),
                       )
                     : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            for (final complaint in _complaints)
-                              IssueCard(
-                                complaint: complaint,
-                                onTap: () {
-                                  toComplaintDetails(complaint);
-                                },
-                              ),
-                          ],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerLowest,
+                          ),
+                          child: Column(
+                            children: [
+                              for (final complaint in _complaints)
+                                IssueCard(
+                                  complaint: complaint,
+                                  onTap: () {
+                                    toComplaintDetails(complaint);
+                                  },
+                                ),
+                            ],
+                          ),
                         ),
                       ),
               ),

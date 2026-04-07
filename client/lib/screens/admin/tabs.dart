@@ -1,7 +1,7 @@
 import 'package:client/screens/admin/admin_account.dart';
 import 'package:client/screens/admin/admin_complaints.dart';
 import 'package:client/screens/admin/admin_home.dart';
-import 'package:client/screens/admin/admin_insights.dart';
+
 import 'package:flutter/material.dart';
 
 class Tabs extends StatefulWidget {
@@ -23,6 +23,7 @@ class _TabsState extends State<Tabs> {
       AdminAccount(),
     ];
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
       body: _pages[_currentIndex],
       bottomNavigationBar: Builder(
         builder: (context) {

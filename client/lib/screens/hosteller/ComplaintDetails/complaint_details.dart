@@ -74,7 +74,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white70, fontSize: 16),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
     } else {
@@ -86,7 +86,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70, fontSize: 15),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
     }
@@ -107,7 +107,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white70, fontSize: 16),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
     } else {
@@ -119,7 +119,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70, fontSize: 15),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
     }
@@ -141,7 +141,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70, fontSize: 15),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
       setState(() {
@@ -157,7 +157,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70, fontSize: 15),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
     }
@@ -178,7 +178,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         ),
       );
       setState(() {
@@ -192,7 +192,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: AppSeeds.bgLight,
         ),
       );
     }
@@ -241,7 +241,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: AppSeeds.bgLight,
         ),
       );
       debugPrint('UpVoted Successfully');
@@ -254,7 +254,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             'Error Occurred',
             style: TextStyle(color: Colors.white70),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: AppSeeds.bgLight,
         ),
       );
     }
@@ -287,7 +287,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: AppSeeds.bgLight,
         ),
       );
       debugPrint('Down Voted Successfully');
@@ -300,7 +300,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             textAlign: TextAlign.center,
             style: TextStyle(color: Colors.white70),
           ),
-          backgroundColor: AppColors.bgLight,
+          backgroundColor: AppSeeds.bgLight,
         ),
       );
     }

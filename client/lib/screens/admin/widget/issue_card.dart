@@ -1,5 +1,3 @@
-import 'package:client/main.dart';
-import 'package:client/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class IssueCard extends StatelessWidget {
@@ -55,18 +53,15 @@ class IssueCard extends StatelessWidget {
           top: 15,
         ),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+          color: Theme.of(
+            context,
+          ).colorScheme.surfaceContainer.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppColors.borderMuted.withValues(alpha: 0.5),
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.5),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.primary.withValues(alpha: 0.05),
-              blurRadius: 30,
-              offset: const Offset(0, 12),
-            ),
-          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

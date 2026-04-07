@@ -12,38 +12,38 @@ class HostellerTabs extends StatefulWidget {
 
 class _HostellerTabsState extends State<HostellerTabs> {
   int _currentIndex = 0;
+  final List<Widget> _pages = [Home(), MyIssues(), AccountScreen()];
+
   @override
   Widget build(BuildContext context) {
-    List<Widget> _pages = [Home(), MyIssues(), AccountScreen()];
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
+      // this ensures the gap color matches your page background
+      backgroundColor: scheme.surfaceContainerLowest,
       body: _pages[_currentIndex],
-      bottomNavigationBar: Builder(
-        builder: (context) {
-          // use theme values so the bar responds to light/dark mode
-          final navTheme = Theme.of(context).bottomNavigationBarTheme;
-          return BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: navTheme.backgroundColor ?? Colors.black,
-            unselectedItemColor: navTheme.unselectedItemColor,
-            selectedItemColor: navTheme.selectedItemColor,
-            currentIndex: _currentIndex,
-            onTap: (index) => setState(() => _currentIndex = index),
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard),
-                label: 'Dashboard',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'My Issues ',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_2_outlined),
-                label: 'Account',
-              ),
-            ],
-          );
-        },
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) => setState(() => _currentIndex = index),
+        backgroundColor: scheme.surfaceContainerHighest,
+        indicatorColor: scheme.primaryContainer,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.list_outlined),
+            selectedIcon: Icon(Icons.list),
+            label: 'My Issues',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Account',
+          ),
+        ],
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:client/screens/admin/admin_complaints.dart';
-import 'package:client/screens/admin/admin_insights.dart';
+
 import 'package:client/screens/admin/approval.dart';
 import 'package:client/screens/admin/widget/issue_card.dart';
 import 'package:client/screens/admin/widget/quick_button.dart';
@@ -85,6 +85,7 @@ class _AdminHomeState extends State<AdminHome> {
             return votesB.compareTo(votesA);
           });
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
       body: SafeArea(
         child: (isAdminLoading || isComplaintsLoading)
             ? Center(child: CircularProgressIndicator())
@@ -92,7 +93,7 @@ class _AdminHomeState extends State<AdminHome> {
                 child: Container(
                   margin: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: SafeArea(

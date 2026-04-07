@@ -5,7 +5,7 @@ import 'package:client/screens/hosteller/add_issue.dart';
 import 'package:client/screens/hosteller/ComplaintDetails/complaint_details.dart';
 import 'package:client/screens/hosteller/widgets/empty_list.dart';
 import 'package:client/screens/hosteller/widgets/progress_indicator.dart';
-import 'package:client/theme/theme.dart';
+
 import 'package:client/screens/hosteller/widgets/issue_button.dart';
 import 'package:client/util/user_storage.dart';
 import 'package:client/screens/hosteller/widgets/raise_card.dart';
@@ -83,22 +83,16 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
-        title: const Text(''),
-      ),
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.bgDark,
-              AppColors.bgDark.withValues(alpha: 0.90),
+              Theme.of(context).colorScheme.surface,
+              Theme.of(context).colorScheme.surface.withValues(alpha: 0.90),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -109,6 +103,7 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 15),
                 Container(
                   padding: EdgeInsets.only(left: 16),
                   alignment: Alignment.topLeft,

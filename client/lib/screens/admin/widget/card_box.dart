@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:client/theme/theme.dart';
 
 class CardBox extends StatelessWidget {
   const CardBox({super.key, required this.title, required this.count});
@@ -14,9 +13,15 @@ class CardBox extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerLow.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.borderMuted.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: Theme.of(
+            context,
+          ).colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
